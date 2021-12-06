@@ -79,7 +79,7 @@ router.post("/checkEmail", async (req, res) => {
             }
         
         } else {
-            res.sendStatus('duplicate');
+            res.send('duplicate');
         }
     } else {
         res.send(error.details[0].message)
