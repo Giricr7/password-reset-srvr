@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const mongo = require("./mongo");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const joi = require("joi")
 
@@ -28,7 +28,7 @@ sendMail = async (userWithToken) => {
         html: `
         <p>Please use the link below to reset your password</p>
         <h4>The below link will expire in 15 minutes</h4>
-        <h5>Click on this <a href="${process.env.CLIENT_URL}/chng_pwd/${userWithToken.token}" target="_blank">link</a> to reset password</h5>
+        <h5>Click on this <a href="${process.env.CLIENT_URL}/#/chng_pwd/${userWithToken.token}" target="_blank">link</a> to reset password</h5>
         `
     };
     
@@ -47,8 +47,8 @@ sendMail = async (userWithToken) => {
 
 //storing the temp_token inside the users document
 generateEmail = async (email,user) => {
-    const salt = await bcrypt.genSalt();
-    const temp_pwd = (await bcrypt.hash(email, salt)).split('/').join('');
+    const salt = await bcrypt.genSaltSync(10);
+    const temp_pwd =  (bcrypt.hashSync(email, salt)).split('/').join('');
     if (user.token !== temp_pwd) {
         const userWithToken = await mongo.db.collection('users').findOneAndUpdate(
             { email: email },
