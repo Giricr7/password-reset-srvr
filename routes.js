@@ -75,11 +75,11 @@ router.post("/checkEmail", async (req, res) => {
             if (result !== 'duplicate') {
                 res.send("available");
             } else {
-                res.sendStatus(400);
+                res.send('duplicate');
             }
         
         } else {
-            res.sendStatus(400);
+            res.sendStatus('duplicate');
         }
     } else {
         res.send(error.details[0].message)
