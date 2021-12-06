@@ -54,7 +54,6 @@ generateEmail = async (email,user) => {
             { email: email },
             { $set: { token: temp_pwd, expiry: Date.now() + 900000 } },
             { returnDocument: "after" });
-        console.log(userWithToken.value);
         const mail_rspns = sendMail(userWithToken.value);
         return mail_rspns
     } else {
@@ -94,7 +93,6 @@ router.patch('/reset-password', async(req, res) => {
         { token: token, expiry: { $gt: Date.now() } },
         { $set: { password: new_pwd,token:"",expiry:0 } },
         { returnDocument: "after" });
-    console.log(userDetails.value)
     if (userDetails.value !== null) {
         res.sendStatus(200);
     } else {
